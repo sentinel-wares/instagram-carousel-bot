@@ -133,12 +133,22 @@ class HttpError(RuntimeError):
         self.detail = detail
 
 
+def _annotate(level: str, msg: str) -> None:
+    """On GitHub Actions also emit an annotation, which shows on the run page and via the API."""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        text = str(msg).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print(f"::{level}::{text[:900]}", flush=True)
+
+
 def log(msg: str) -> None:
     print(msg, flush=True)
+    if str(msg).startswith(("[info]", "[error]")):
+        _annotate("notice", msg)
 
 
 def warn(msg: str) -> None:
     print(f"[warn] {msg}", flush=True)
+    _annotate("warning", msg)
 
 
 # ---------------------------------------------------------------------------
