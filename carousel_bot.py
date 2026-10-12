@@ -46,8 +46,8 @@ def env_or(name: str, default: str) -> str:
 
 BUFFER_API_URL = "https://api.buffer.com"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-GEMINI_MODEL = env_or("GEMINI_MODEL", "gemini-3.8-flash")
-GEMINI_FALLBACK_MODEL = os.environ.get("GEMINI_FALLBACK_MODEL", "").strip()
+GEMINI_MODEL = env_or("GEMINI_MODEL", "gemini-3.1-flash-lite")      # free tier: 15 requests/min, 500/day
+GEMINI_FALLBACK_MODEL = env_or("GEMINI_FALLBACK_MODEL", "gemini-3.8-flash")
 
 CARD_NAME = env_or("CARD_NAME", "Sentinelwares")
 CARD_HANDLE = env_or("CARD_HANDLE", "@sentinelwares")

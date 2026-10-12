@@ -17,7 +17,7 @@ Topic rotation (one per day): how to learn cybersecurity, cyber news, vulnerabil
    - `CARD_NAME` (default `Sentinelwares`)
    - `CARD_HANDLE` (default `@sentinelwares`)
    - `CARD_FOOTER` (shown on the last slide, e.g. `Follow @yourhandle for daily security tips`)
-   - `GEMINI_MODEL`, `GEMINI_FALLBACK_MODEL`
+   - `GEMINI_MODEL` (default `gemini-3.1-flash-lite`), `GEMINI_FALLBACK_MODEL` (default `gemini-3.8-flash`)
    - `INSTAGRAM_POST_TYPE` (default `post`; if Buffer refuses multi-image posts, set `carousel`)
    - `BUFFER_CHANNEL_INSTAGRAM` (only if you have several Instagram channels)
 5. **Photos.** Put your background images (JPG/PNG/WebP) in `backgrounds/`. Without them the bot uses plain dark gradients. Recently used photos are avoided and no photo repeats on adjacent slides. Optionally add `assets/logo.png` as the round avatar on the card.
