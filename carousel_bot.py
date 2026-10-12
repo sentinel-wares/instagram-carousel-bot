@@ -58,6 +58,9 @@ MIN_SLIDES = 3
 MIN_WORDS, MAX_WORDS = 5, 15
 MAX_AGE_DAYS = float(env_or("MAX_AGE_DAYS", "2"))
 MIN_SUMMARY_CHARS = int(env_or("MIN_SUMMARY_CHARS", "120"))
+# Instagram's "AI info" label. Off by default: the slide text is written by an AI, the photos are stock-style
+# backgrounds. Set the variable INSTAGRAM_AI_LABEL=1 to turn the label on for every post.
+INSTAGRAM_AI_LABEL = env_or("INSTAGRAM_AI_LABEL", "0").lower() in ("1", "true", "yes")
 INSTAGRAM_POST_TYPE = env_or("INSTAGRAM_POST_TYPE", "post")   # Buffer: "post" (multi-image = carousel)
 MEDIA_BRANCH = "media"
 
@@ -335,7 +338,7 @@ def queue_carousel(channel_id: str, caption: str, image_urls: list, alt_texts: l
             "aiAssisted": True,
             "assets": [{"image": {"url": u, "metadata": {"altText": a}}} for u, a in zip(image_urls, alt_texts)],
             "metadata": {"instagram": {"type": INSTAGRAM_POST_TYPE, "shouldShareToFeed": True,
-                                       "isAiGenerated": True}},
+                                       "isAiGenerated": INSTAGRAM_AI_LABEL}},
         }
     }, retries=1)
     result = data["createPost"]

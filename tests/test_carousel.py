@@ -208,7 +208,7 @@ def _(tmp):
     assert len(e.created) == 1
     inp = e.created[0]
     assert inp["channelId"] == IG and inp["mode"] == "addToQueue" and inp["schedulingType"] == "automatic"
-    assert inp["aiAssisted"] is True and inp["metadata"] == {"instagram": {"type": "post", "shouldShareToFeed": True, "isAiGenerated": True}}
+    assert inp["aiAssisted"] is True and inp["metadata"] == {"instagram": {"type": "post", "shouldShareToFeed": True, "isAiGenerated": False}}
     assert len(inp["assets"]) == 5
     first = inp["assets"][0]["image"]
     assert first["url"].startswith("https://raw.githubusercontent.com/sentinel-wares/instagram-carousel-bot/media/")

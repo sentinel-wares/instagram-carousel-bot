@@ -35,6 +35,7 @@ jobs:
       CARD_HANDLE: ${{ vars.CARD_HANDLE }}
       CARD_FOOTER: ${{ vars.CARD_FOOTER }}
       INSTAGRAM_POST_TYPE: ${{ vars.INSTAGRAM_POST_TYPE }}
+      INSTAGRAM_AI_LABEL: ${{ vars.INSTAGRAM_AI_LABEL }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
