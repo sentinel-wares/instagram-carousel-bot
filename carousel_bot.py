@@ -422,6 +422,10 @@ def gemini_generate(prompt: str) -> str:
             return _gemini_call(model, prompt, key)
         except HttpError as exc:
             if exc.code == 429:
+                # Free-tier quotas are per model, so the fallback model may still have room.
+                if i + 1 < len(models):
+                    warn(f"{model} quota used up; trying {models[i + 1]}")
+                    continue
                 raise QuotaError("Gemini quota used up for now") from None
             if exc.code in (400, 401, 403, 404):
                 if i:

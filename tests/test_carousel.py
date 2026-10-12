@@ -335,6 +335,29 @@ def _(tmp):
     with contextlib.redirect_stdout(io.StringIO()):
         assert cb.gemini_generate("p") == "{}"
     assert seen == ["main", "backup"]
+    # quota is per model: a 429 on the main model moves on to the fallback; 429 on both stops quietly
+    seen.clear()
+
+    def quota_main(url, payload, headers, **k):
+        model = url.split("/models/")[1].split(":")[0]
+        seen.append(model)
+        if model == "main":
+            raise cb.HttpError(429, url, "quota")
+        return {"candidates": [{"content": {"parts": [{"text": "{}"}]}}]}
+    cb.http_post_json = quota_main
+    with contextlib.redirect_stdout(io.StringIO()):
+        assert cb.gemini_generate("p") == "{}"
+    assert seen == ["main", "backup"]
+
+    def quota_all(url, payload, headers, **k):
+        raise cb.HttpError(429, url, "quota")
+    cb.http_post_json = quota_all
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            cb.gemini_generate("p")
+        raise AssertionError("expected QuotaError")
+    except cb.QuotaError:
+        pass
     cb.GEMINI_MODEL, cb.GEMINI_FALLBACK_MODEL = "gemini-3.8-flash", ""
     os.environ["X_EMPTY"] = ""
     assert cb.env_or("X_EMPTY", "d") == "d" and cb.env_or("X_MISSING_VAR", "d") == "d"
