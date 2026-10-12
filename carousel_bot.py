@@ -415,6 +415,8 @@ def gemini_generate(prompt: str) -> str:
     models = [GEMINI_MODEL]
     if GEMINI_FALLBACK_MODEL and GEMINI_FALLBACK_MODEL != GEMINI_MODEL:
         models.append(GEMINI_FALLBACK_MODEL)
+    log(f"[info] Gemini models in use: {', '.join(models)}"
+        + ("" if len(models) > 1 else " (no separate fallback model is set; add the GEMINI_FALLBACK_MODEL variable)"))
     for i, model in enumerate(models):
         try:
             if i:
