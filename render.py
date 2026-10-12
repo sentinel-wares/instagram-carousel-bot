@@ -110,6 +110,7 @@ def _avatar(size: int, initial: str, logo: Path | None) -> Image.Image:
     if logo and logo.is_file():
         face = ImageOps.fit(Image.open(logo).convert("RGBA"), (s, s), method=Image.LANCZOS)
         layer.paste(face, (0, 0), mask)
+        ImageDraw.Draw(layer).ellipse((SS, SS, s - 1 - SS, s - 1 - SS), outline=(205, 210, 216, 255), width=SS * 3)
     else:
         d = ImageDraw.Draw(layer)
         d.ellipse((0, 0, s - 1, s - 1), fill=(10, 18, 34, 255))
