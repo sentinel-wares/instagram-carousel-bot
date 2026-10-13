@@ -1,19 +1,29 @@
 {
   "topics": [
-    "Cybersecurity Learning Roadmap"
+    "Cybersecurity Learning Roadmap",
+    "SonicWall SMA 1000 SSRF Vulnerability"
   ],
-  "links": [],
-  "category_index": 1,
+  "links": [
+    "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html"
+  ],
+  "category_index": 2,
   "recent_backgrounds": [
     "globe.jpg",
     "circuit-board.jpg",
     "laptop-dark.jpg",
     "lock-network.jpg",
-    "datacenter.jpg"
+    "datacenter.jpg",
+    "desk-blue.jpg",
+    "circuit-board.jpg",
+    "desk-blue.jpg",
+    "datacenter.jpg",
+    "desk-blue.jpg",
+    "globe.jpg"
   ],
   "bot_posts": {
     "instagram": [
-      "6accbfc2624c35d1cf1d95fe"
+      "6accbfc2624c35d1cf1d95fe",
+      "6ace140206d8b03d5e02a726"
     ]
   }
 }
