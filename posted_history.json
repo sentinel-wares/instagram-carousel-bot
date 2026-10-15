@@ -2,12 +2,13 @@
   "topics": [
     "Cybersecurity Learning Roadmap",
     "SonicWall SMA 1000 SSRF Vulnerability",
-    "SQL Injection vulnerabilities"
+    "SQL Injection vulnerabilities",
+    "Agentic Security and Autonomous Validation"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html"
   ],
-  "category_index": 3,
+  "category_index": 4,
   "recent_backgrounds": [
     "globe.jpg",
     "circuit-board.jpg",
@@ -25,13 +26,21 @@
     "lock-network.jpg",
     "desk-blue.jpg",
     "datacenter.jpg",
-    "circuit-board.jpg"
+    "circuit-board.jpg",
+    "laptop-dark.jpg",
+    "datacenter.jpg",
+    "lock-network.jpg",
+    "circuit-board.jpg",
+    "globe.jpg",
+    "desk-blue.jpg",
+    "datacenter.jpg"
   ],
   "bot_posts": {
     "instagram": [
       "6accbfc2624c35d1cf1d95fe",
       "6ace140206d8b03d5e02a726",
-      "6acf47843a46469ddbc76252"
+      "6acf47843a46469ddbc76252",
+      "6ad092b06295ecc932f6ad7c"
     ]
   }
 }
