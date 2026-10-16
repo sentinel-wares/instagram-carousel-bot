@@ -3,12 +3,13 @@
     "Cybersecurity Learning Roadmap",
     "SonicWall SMA 1000 SSRF Vulnerability",
     "SQL Injection vulnerabilities",
-    "Agentic Security and Autonomous Validation"
+    "Agentic Security and Autonomous Validation",
+    "Pros and Cons of Infrastructure as Code"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html"
   ],
-  "category_index": 4,
+  "category_index": 5,
   "recent_backgrounds": [
     "globe.jpg",
     "circuit-board.jpg",
@@ -33,14 +34,22 @@
     "circuit-board.jpg",
     "globe.jpg",
     "desk-blue.jpg",
-    "datacenter.jpg"
+    "datacenter.jpg",
+    "globe.jpg",
+    "lock-network.jpg",
+    "desk-blue.jpg",
+    "circuit-board.jpg",
+    "laptop-dark.jpg",
+    "datacenter.jpg",
+    "laptop-dark.jpg"
   ],
   "bot_posts": {
     "instagram": [
       "6accbfc2624c35d1cf1d95fe",
       "6ace140206d8b03d5e02a726",
       "6acf47843a46469ddbc76252",
-      "6ad092b06295ecc932f6ad7c"
+      "6ad092b06295ecc932f6ad7c",
+      "6ad1e305ee2c696029c80867"
     ]
   }
 }
