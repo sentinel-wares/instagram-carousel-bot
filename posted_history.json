@@ -4,12 +4,13 @@
     "SonicWall SMA 1000 SSRF Vulnerability",
     "SQL Injection vulnerabilities",
     "Agentic Security and Autonomous Validation",
-    "Pros and Cons of Infrastructure as Code"
+    "Pros and Cons of Infrastructure as Code",
+    "Hardcoding secrets in source code"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html"
   ],
-  "category_index": 5,
+  "category_index": 6,
   "recent_backgrounds": [
     "globe.jpg",
     "circuit-board.jpg",
@@ -41,7 +42,13 @@
     "circuit-board.jpg",
     "laptop-dark.jpg",
     "datacenter.jpg",
-    "laptop-dark.jpg"
+    "laptop-dark.jpg",
+    "desk-blue.jpg",
+    "datacenter.jpg",
+    "globe.jpg",
+    "circuit-board.jpg",
+    "laptop-dark.jpg",
+    "lock-network.jpg"
   ],
   "bot_posts": {
     "instagram": [
@@ -49,7 +56,8 @@
       "6ace140206d8b03d5e02a726",
       "6acf47843a46469ddbc76252",
       "6ad092b06295ecc932f6ad7c",
-      "6ad1e305ee2c696029c80867"
+      "6ad1e305ee2c696029c80867",
+      "6ad32e3c769b4579346ac55d"
     ]
   }
 }
