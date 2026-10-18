@@ -5,16 +5,14 @@
     "SQL Injection vulnerabilities",
     "Agentic Security and Autonomous Validation",
     "Pros and Cons of Infrastructure as Code",
-    "Hardcoding secrets in source code"
+    "Hardcoding secrets in source code",
+    "Attack Surface Management"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html"
   ],
-  "category_index": 6,
+  "category_index": 7,
   "recent_backgrounds": [
-    "globe.jpg",
-    "circuit-board.jpg",
-    "laptop-dark.jpg",
     "lock-network.jpg",
     "datacenter.jpg",
     "desk-blue.jpg",
@@ -48,7 +46,13 @@
     "globe.jpg",
     "circuit-board.jpg",
     "laptop-dark.jpg",
-    "lock-network.jpg"
+    "lock-network.jpg",
+    "globe.jpg",
+    "lock-network.jpg",
+    "datacenter.jpg",
+    "desk-blue.jpg",
+    "laptop-dark.jpg",
+    "circuit-board.jpg"
   ],
   "bot_posts": {
     "instagram": [
@@ -57,7 +61,8 @@
       "6acf47843a46469ddbc76252",
       "6ad092b06295ecc932f6ad7c",
       "6ad1e305ee2c696029c80867",
-      "6ad32e3c769b4579346ac55d"
+      "6ad32e3c769b4579346ac55d",
+      "6ad483440b0d72757a134bf9"
     ]
   }
 }
