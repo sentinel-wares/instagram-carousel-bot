@@ -2,7 +2,7 @@
 
 Posts one cybersecurity carousel a day to Instagram, at no cost.
 
-Each day a GitHub Action picks the next topic, Gemini writes 3–7 short slides (5–15 words each) and a caption, Pillow draws each slide in a navy/amber "radar" style (bold hook, numbered points, progress pills; set `CARD_STYLE=classic` for the old photo + white card look), and the finished carousel goes into your Buffer queue for Instagram.
+Each day a GitHub Action picks the next topic, Gemini writes 8–12 short slides (count chosen per topic, last slide is the call to action) (5–15 words each) and a caption, Pillow draws each slide in a navy/amber "radar" style (bold hook, numbered points, progress pills; set `CARD_STYLE=classic` for the old photo + white card look), and the finished carousel goes into your Buffer queue for Instagram.
 
 Topic rotation (one per day): how to learn cybersecurity, cyber news, vulnerabilities, agentic security, pros and cons, dev and IT, attack surface and exposure, quotes. Only the agentic-security and exposure days may mention Surfacia / Sentiness. News days use a real, fresh story from the RSS feeds and nothing invented.
 
