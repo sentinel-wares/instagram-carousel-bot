@@ -25,13 +25,17 @@ ORG = "o" * 24
 REAL = {k: getattr(cb, k) for k in ("gemini_generate", "buffer_request", "url_is_image", "fetch_news", "http_post_json")}
 
 
-def good(topic="Why default passwords still cause breaches", n=5):
+def good(topic="Why default passwords still cause breaches", n=8):
     texts = ["Default passwords are still the easiest way in",
              "1) Attackers try vendor defaults first, every single time",
              "2) Scanners find exposed admin panels within minutes",
              "3) Change every default before a device touches the network",
              "Which device on your network still has its factory login?",
-             "Inventory first, then harden what you actually find"][:n]
+             "Inventory first, then harden what you actually find",
+             "Rotate shared credentials after every staff or vendor change",
+             "Block default accounts at the network edge until they are changed",
+             "Save this post for your next hardening checklist review",
+             "Share it with the person who owns your device inventory"][:n]
     return json.dumps({"skip": False, "skip_reason": "", "topic": topic, "slides": texts,
                        "caption": "Defaults are public knowledge, which makes them the cheapest attack there is. "
                                   "Save this for your next hardening checklist. What is the oddest default you have found?",
@@ -52,7 +56,7 @@ class Env:
         for k in ("GITHUB_REPOSITORY", "IMAGES_BASE_URL", "BUFFER_CHANNEL_INSTAGRAM", "BUFFER_ORG_ID", "DRY_RUN"):
             os.environ.pop(k, None)
         os.environ.update({"BUFFER_API_KEY": "k\n", "GEMINI_API_KEY": "g\n", "GITHUB_REPOSITORY": "sentinel-wares/instagram-carousel-bot"})
-        cb.QUEUE_TARGET, cb.MAX_SLIDES, cb.CARD_FOOTER = 1, 7, True
+        cb.QUEUE_TARGET, cb.MAX_SLIDES, cb.CARD_FOOTER = 1, 12, True
         self.created, self.prompts, self.checked = [], [], []
         self.waiting = waiting or []
         self.channels = [{"id": IG, "service": "instagram", "name": "sentinelwares", "isDisconnected": False,
@@ -153,8 +157,8 @@ def _(tmp):
         return cb.validate_content(d, ["Old topic"], allow_product=False)
 
     assert check()[0]["topic"].startswith("Why default")
-    assert "need 3 to 7" in check(slides=base["slides"][:2])[1]
-    assert "need 3 to 7" in check(slides=base["slides"] * 2)[1]
+    assert "need 8 to 12" in check(slides=base["slides"][:7])[1]
+    assert "need 8 to 12" in check(slides=base["slides"] * 2)[1]
     assert "must have 5 to 15" in check(slides=["Too short"] + base["slides"][1:])[1]
     assert "must have 5 to 15" in check(slides=["word " * 16] + base["slides"][1:])[1]
     assert "hashtag, link or emoji" in check(slides=["Check https://x.io for the details today"] + base["slides"][1:])[1]
@@ -181,7 +185,7 @@ def _(tmp):
     out, code = e.run("prepare")
     assert code == 0, out
     pend = json.loads(cb.PENDING_FILE.read_text())
-    assert pend["category"] == "learn" and len(pend["files"]) == 5 and len(pend["slides"]) == 5
+    assert pend["category"] == "learn" and len(pend["files"]) == 8 and len(pend["slides"]) == 8
     for f in pend["files"]:
         assert (Path(tmp) / f).is_file()
     assert pend["caption"].endswith("#cybersecurity #infosec #passwords #hardening #security")
@@ -231,14 +235,14 @@ def _(tmp):
     inp = e.created[0]
     assert inp["channelId"] == IG and inp["mode"] == "addToQueue" and inp["schedulingType"] == "automatic"
     assert inp["aiAssisted"] is True and inp["metadata"] == {"instagram": {"type": "post", "shouldShareToFeed": True, "isAiGenerated": False}}
-    assert len(inp["assets"]) == 5
+    assert len(inp["assets"]) == 8
     first = inp["assets"][0]["image"]
     assert first["url"].startswith("https://raw.githubusercontent.com/sentinel-wares/instagram-carousel-bot/media/")
     assert first["url"].endswith("/slide-1.jpg") and first["metadata"]["altText"].startswith("Slide 1: ")
     assert inp["text"].startswith("Defaults are public knowledge")
     assert not cb.PENDING_FILE.exists()
     assert e.history()["bot_posts"]["instagram"] == ["p" * 23 + "1"]
-    assert len(e.checked) == 5
+    assert len(e.checked) == 8
 
 
 @t("8 publish: Buffer rejects it -> exit 1, pending discarded (never retried blindly), nothing recorded")
@@ -338,7 +342,7 @@ def _(tmp):
     os.environ.pop("DRY_RUN")
     assert code == 0 and "DRY_RUN=1 set" in out and not e.created
     assert not cb.PENDING_FILE.exists() and e.history() is None
-    assert len(list((Path(tmp) / "out").rglob("*.jpg"))) == 5
+    assert len(list((Path(tmp) / "out").rglob("*.jpg"))) == 8
 
 
 @t("16 gemini fallback model and env_or")
