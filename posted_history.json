@@ -7,12 +7,13 @@
     "Pros and Cons of Infrastructure as Code",
     "Hardcoding secrets in source code",
     "Attack Surface Management",
-    "The nature of security debt"
+    "The nature of security debt",
+    "Beginner cybersecurity lab environments"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html"
   ],
-  "category_index": 0,
+  "category_index": 1,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
