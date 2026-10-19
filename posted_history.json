@@ -6,12 +6,13 @@
     "Agentic Security and Autonomous Validation",
     "Pros and Cons of Infrastructure as Code",
     "Hardcoding secrets in source code",
-    "Attack Surface Management"
+    "Attack Surface Management",
+    "The nature of security debt"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html"
   ],
-  "category_index": 7,
+  "category_index": 0,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -62,7 +63,8 @@
       "6ad092b06295ecc932f6ad7c",
       "6ad1e305ee2c696029c80867",
       "6ad32e3c769b4579346ac55d",
-      "6ad483440b0d72757a134bf9"
+      "6ad483440b0d72757a134bf9",
+      "6ad5ba4238c1835cd440050c"
     ]
   }
 }
