@@ -2,9 +2,9 @@
 
 Posts one cybersecurity carousel a day to Instagram, at no cost.
 
-Each day a GitHub Action picks the next topic, Gemini writes 3–7 short slides (5–15 words each) and a caption, Pillow draws each slide as a white rounded "tweet-style" card over one of your background photos, and the finished carousel goes into your Buffer queue for Instagram.
+Each day a GitHub Action picks the next topic, Gemini writes 3–7 short slides (5–15 words each) and a caption, Pillow draws each slide in a navy/amber "radar" style (bold hook, numbered points, progress pills; set `CARD_STYLE=classic` for the old photo + white card look), and the finished carousel goes into your Buffer queue for Instagram.
 
-Topic rotation (one per day): how to learn cybersecurity, cyber news, vulnerabilities, agentic security, pros and cons, dev and IT, attack surface and exposure, quotes. Only the agentic-security and exposure days may mention Surfacia / Sentinis. News days use a real, fresh story from the RSS feeds and nothing invented.
+Topic rotation (one per day): how to learn cybersecurity, cyber news, vulnerabilities, agentic security, pros and cons, dev and IT, attack surface and exposure, quotes. Only the agentic-security and exposure days may mention Surfacia / Sentiness. News days use a real, fresh story from the RSS feeds and nothing invented.
 
 ## One-time setup
 
@@ -14,6 +14,7 @@ Topic rotation (one per day): how to learn cybersecurity, cyber news, vulnerabil
    - `BUFFER_API_KEY`
    - `GEMINI_API_KEY`
 4. **Variables** (same page, Variables tab; all optional):
+   - `CARD_STYLE` (`radar` default, or `classic`; only classic uses `backgrounds/` photos)
    - `CARD_NAME` (default `Sentinelwares`)
    - `CARD_HANDLE` (default `@sentinelwares`)
    - `CARD_FOOTER` (shown on the last slide, e.g. `Follow @yourhandle for daily security tips`)

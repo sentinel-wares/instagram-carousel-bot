@@ -1,12 +1,18 @@
 """Draws Instagram carousel slides with Pillow (free, no Canva needed).
 
-Look: a full-bleed background photo, a dark fade towards the bottom, and a
+Two looks, chosen with the CARD_STYLE variable (see render_slide):
+  "radar"   (default) navy gradient + amber radar rings, bold text, numbered points, progress pills.
+  "classic" the original photo background with a white tweet-style card (described below).
+
+Classic look: a full-bleed background photo, a dark fade towards the bottom, and a
 rounded white card carrying the brand name, handle and the slide text, in the
 style of "tweet-like" carousel slides. Output is a 1080x1350 (4:5) JPEG, the
 only image format Instagram accepts for carousels.
 """
 
+import math
 import random
+import re
 from pathlib import Path
 
 from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
@@ -165,10 +171,10 @@ def _card(lines: list, font, size: int, name: str, handle: str, logo: Path | Non
     return card
 
 
-def render_slide(text: str, index: int, total: int, out_path: Path, *, background: Path | None = None,
-                 seed: int = 0, name: str = "Sentinelwares", handle: str = "@sentinelwares",
-                 logo: Path | None = None, footer: str = "") -> Path:
-    """Render one slide to `out_path` (JPEG) and return the path."""
+def _render_classic(text: str, index: int, total: int, out_path: Path, *, background: Path | None = None,
+                    seed: int = 0, name: str = "Sentinelwares", handle: str = "@sentinelwares",
+                    logo: Path | None = None, footer: str = "") -> Path:
+    """Render one classic (photo + white card) slide to `out_path` (JPEG) and return the path."""
     if background is not None:
         base = _cover(Image.open(background))
     else:
@@ -191,6 +197,195 @@ def render_slide(text: str, index: int, total: int, out_path: Path, *, backgroun
     out_path.parent.mkdir(parents=True, exist_ok=True)
     canvas.convert("RGB").save(out_path, "JPEG", quality=90, optimize=True)
     return out_path
+
+
+# ---------------------------------------------------------------------------
+# "radar" style
+# ---------------------------------------------------------------------------
+NAVY_T = (9, 16, 32)
+NAVY_B = (20, 33, 64)
+AMBER = (245, 168, 0)
+WHITE = (255, 255, 255)
+R_MUTED = (176, 188, 210)
+PILL_OFF = (70, 84, 118)
+MARGIN = 80                 # keeps text inside Instagram's centre-crop grid preview
+TEXT_W = W - 2 * MARGIN
+TEXT_BOTTOM = 1190          # text must end above the footer
+BRAND_URL = "surfacia.in"
+_NUM_RE = re.compile(r"^\s*(\d{1,2})\s*[).:]\s+(.*)$")
+
+
+def _rf(name: str, size: float) -> ImageFont.FreeTypeFont:
+    return ImageFont.truetype(str(FONT_DIR / name), int(size * SS))
+
+
+def _s(v: float) -> int:
+    return int(round(v * SS))
+
+
+def parse_slide(text: str):
+    """'3) Change defaults' -> ('03', 'Change defaults'); unnumbered text -> (None, text)."""
+    m = _NUM_RE.match(text)
+    if m:
+        return f"{int(m.group(1)):02d}", m.group(2).strip()
+    return None, " ".join(text.split())
+
+
+def _radar_dots(rng: random.Random, center, avoid: list, count: int = 8) -> list:
+    """Seeded dot layout around the rings, kept away from the text and header areas."""
+    cx, cy = center
+    dots, tries = [], 0
+    while len(dots) < count and tries < 400:
+        tries += 1
+        ang = rng.uniform(0, 2 * math.pi)
+        dist = rng.uniform(60, 460)
+        x, y = cx + dist * math.cos(ang), cy + dist * math.sin(ang)
+        if not (40 < x < W - 40 and 40 < y < H - 40):
+            continue
+        if any(x0 - 30 <= x <= x1 + 30 and y0 - 30 <= y <= y1 + 30 for x0, y0, x1, y1 in avoid):
+            continue
+        dots.append((x, y, rng.choice([5, 6, 8]), rng.choice([150, 180, 210, 235])))
+    return dots
+
+
+def _radar_background(center, seed: int, avoid: list) -> Image.Image:
+    strip = Image.new("RGB", (1, H * SS))
+    px = strip.load()
+    for y in range(H * SS):
+        t = y / (H * SS - 1)
+        px[0, y] = tuple(int(NAVY_T[i] + (NAVY_B[i] - NAVY_T[i]) * t) for i in range(3))
+    base = strip.resize((W * SS, H * SS)).convert("RGBA")
+    ring = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    rd = ImageDraw.Draw(ring)
+    cx, cy = center
+    for r, a in [(130, 80), (260, 58), (400, 42), (550, 30), (720, 20)]:
+        rd.ellipse([_s(cx - r), _s(cy - r), _s(cx + r), _s(cy + r)], outline=AMBER + (a,), width=_s(2))
+    rd.line([_s(cx - 760), _s(cy), _s(cx + 760), _s(cy)], fill=AMBER + (28,), width=_s(1.6))
+    rd.line([_s(cx), _s(cy - 760), _s(cx), _s(cy + 760)], fill=AMBER + (28,), width=_s(1.6))
+    for x, y, rr, a in _radar_dots(random.Random(seed), center, avoid):
+        rd.ellipse([_s(x - rr * 2.6), _s(y - rr * 2.6), _s(x + rr * 2.6), _s(y + rr * 2.6)], fill=AMBER + (26,))
+        rd.ellipse([_s(x - rr), _s(y - rr), _s(x + rr), _s(y + rr)], fill=AMBER + (a,))
+    return Image.alpha_composite(base, ring)
+
+
+def _spaced(d, x, y, text, font, fill, spacing):
+    cx = _s(x)
+    for ch in text:
+        d.text((cx, _s(y)), ch, font=font, fill=fill)
+        cx += font.getlength(ch) + _s(spacing)
+
+
+def _wrap_words(words: list, font, max_w: float) -> list:
+    """words: [(text, colour)]. Returns lines, each a list of (text, colour)."""
+    lines, cur, cur_w = [], [], 0.0
+    space = font.getlength(" ") / SS
+    for text, colour in words:
+        w = font.getlength(text) / SS
+        add = w if not cur else w + space
+        if cur and cur_w + add > max_w:
+            lines.append(cur)
+            cur, cur_w = [(text, colour)], w
+        else:
+            cur.append((text, colour))
+            cur_w += add
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def _fit_lines(words: list, top: float, sizes, max_lines: int, line_ratio: float, face: str):
+    """Largest size whose wrapped text has <= max_lines and ends above TEXT_BOTTOM."""
+    for size in sizes:
+        font = _rf(face, size)
+        lines = _wrap_words(words, font, TEXT_W)
+        line_h = size * line_ratio
+        if len(lines) <= max_lines and top + len(lines) * line_h <= TEXT_BOTTOM:
+            return font, lines, line_h
+    return font, lines, line_h
+
+
+def _draw_lines(d, lines, font, x, y, line_h):
+    space = font.getlength(" ") / SS
+    for i, line in enumerate(lines):
+        cx = x
+        for text, colour in line:
+            d.text((_s(cx), _s(y + i * line_h)), text, font=font, fill=colour)
+            cx += font.getlength(text) / SS + space
+
+
+def _render_radar(text: str, index: int, total: int, out_path: Path, *, seed: int = 0,
+                  footer: str = "", name: str = "Sentinelwares") -> Path:
+    num, body = parse_slide(text)
+    cover = index == 0
+    last = index == total - 1 and total > 1
+    words = body.split()
+    colours = [WHITE] * len(words)
+    if cover or last or num is None:
+        colours[-1] = AMBER                       # last word in amber, like the cover hook
+    wlist = list(zip(words, colours))
+
+    if cover:
+        top = 520
+        font, lines, line_h = _fit_lines(wlist, top, range(100, 63, -4), 5, 1.18, "Inter-ExtraBold.otf")
+        center = (880, 330)
+    elif num:
+        top = 640
+        font, lines, line_h = _fit_lines(wlist, top, range(78, 51, -4), 5, 1.26, "Inter-ExtraBold.otf")
+        center = (200, 1020)
+    else:
+        top = 430
+        font, lines, line_h = _fit_lines(wlist, top, range(84, 51, -4), 7, 1.24, "Inter-ExtraBold.otf")
+        center = (880, 1010) if seed % 2 else (200, 1020)
+
+    text_box = (MARGIN, top, W - MARGIN, top + len(lines) * line_h)
+    avoid = [text_box, (0, 60, W, 140), (0, 1220, W, 1320)]
+    if cover:
+        avoid.append((MARGIN, 440, W - MARGIN, 490))
+    if num:
+        avoid.append((MARGIN, 330, 560, 600))
+    img = _radar_background(center, seed, avoid)
+    d = ImageDraw.Draw(img)
+
+    # header
+    d.rounded_rectangle([_s(MARGIN), _s(84), _s(MARGIN + 12), _s(120)], radius=_s(3), fill=AMBER)
+    _spaced(d, MARGIN + 32, 86, "SENTINELWARES", _rf("Inter-Bold.otf", 30), WHITE, 5)
+
+    if cover:
+        _spaced(d, MARGIN, 452, "SECURITY BRIEF", _rf("Inter-Bold.otf", 28), AMBER, 5)
+    elif num:
+        d.text((_s(MARGIN), _s(330)), num, font=_rf("Inter-ExtraBold.otf", 230), fill=AMBER)
+    _draw_lines(d, lines, font, MARGIN, top, line_h)
+
+    # footer: swipe cue (or the follow line on the last slide), url, progress pills
+    if last:
+        if footer:
+            d.text((_s(MARGIN), _s(1236)), footer,
+                   font=_rf("Inter-SemiBold.otf", 28), fill=WHITE)
+    else:
+        d.text((_s(MARGIN), _s(1236)), "Swipe  \u2192", font=_rf("Inter-SemiBold.otf", 34), fill=WHITE)
+        f_url = _rf("Inter-Medium.otf", 30)
+        d.text((_s(W - MARGIN - f_url.getlength(BRAND_URL) / SS), _s(1240)), BRAND_URL, font=f_url, fill=R_MUTED)
+    x = MARGIN
+    for i in range(total):
+        w = 44 if i == index else 14
+        d.rounded_rectangle([_s(x), _s(1296), _s(x + w), _s(1306)], radius=_s(5),
+                            fill=AMBER if i == index else PILL_OFF)
+        x += w + 10
+
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    img.convert("RGB").resize((W, H), Image.LANCZOS).save(out_path, "JPEG", quality=92, optimize=True)
+    return out_path
+
+
+def render_slide(text: str, index: int, total: int, out_path: Path, *, background: Path | None = None,
+                 seed: int = 0, name: str = "Sentinelwares", handle: str = "@sentinelwares",
+                 logo: Path | None = None, footer: str = "", style: str = "radar") -> Path:
+    """Render one slide to `out_path` (JPEG) and return the path. `style`: "radar" or "classic"."""
+    if (style or "radar").lower() == "classic":
+        return _render_classic(text, index, total, out_path, background=background, seed=seed, name=name,
+                               handle=handle, logo=logo, footer=footer)
+    return _render_radar(text, index, total, out_path, seed=seed, footer=footer, name=name)
 
 
 def pick_backgrounds(photos: list, count: int, recent: list, rng: random.Random) -> list:

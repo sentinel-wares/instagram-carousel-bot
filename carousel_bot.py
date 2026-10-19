@@ -51,6 +51,7 @@ GEMINI_FALLBACK_MODEL = env_or("GEMINI_FALLBACK_MODEL", "gemini-3.8-flash")
 
 CARD_NAME = env_or("CARD_NAME", "Sentinelwares")
 CARD_HANDLE = env_or("CARD_HANDLE", "@sentinelwares")
+CARD_STYLE = env_or("CARD_STYLE", "radar").lower()     # "radar" (navy/amber) or "classic" (photo + white card)
 CARD_FOOTER = env_or("CARD_FOOTER", "1") != "0"        # "Follow @handle ..." on the last slide
 QUEUE_TARGET = int(env_or("QUEUE_TARGET", "1"))          # own carousels allowed to wait in the queue
 MAX_SLIDES = int(env_or("MAX_SLIDES", "7"))
@@ -80,7 +81,7 @@ PRODUCT_CATEGORIES = {"agentic_security", "asm_exposure"}   # the only ones that
 
 PRODUCT_FACTS = (
     "Facts you may use about our products (use nothing beyond these): Surfacia continuously monitors a "
-    "company's digital assets. When it finds something new, Sentinis, our AI engineer (still in "
+    "company's digital assets. When it finds something new, Sentiness, our AI engineer (still in "
     "development), investigates it to validate whether it is a real vulnerability and a true positive, "
     "and digs deeper into the recon when the recon is not sufficient."
 )
@@ -479,7 +480,9 @@ def validate_content(data: dict, recent_topics: list, allow_product: bool):
         return None, f"caption must be 60 to 1500 characters, got {len(caption)}"
     if "http" in caption.lower() or "www." in caption.lower() or "#" in caption:
         return None, "caption must not contain links or hashtags (hashtags go in the hashtags list)"
-    if not allow_product and re.search(r"surfacia|sentinis|link in bio", caption, re.I):
+    if re.search(r"sentinis", caption + " " + " ".join(slides), re.I):
+        return None, 'the product is spelled "Sentiness", never "Sentinis"'
+    if not allow_product and re.search(r"surfacia|sentin(?:is|ess)|link in bio", caption, re.I):
         return None, "this topic must not mention our products or 'link in bio'"
 
     tags = []
@@ -487,8 +490,8 @@ def validate_content(data: dict, recent_topics: list, allow_product: bool):
         t = re.sub(r"[^A-Za-z0-9_]", "", str(t))
         if t and t.lower() not in [x.lower() for x in tags]:
             tags.append(t)
-    if not 5 <= len(tags) <= 12:
-        return None, f"need 5 to 12 hashtags, got {len(tags)}"
+    if not 3 <= len(tags) <= 5:
+        return None, f"need 3 to 5 hashtags, got {len(tags)}"
 
     topic = " ".join(str(data.get("topic") or "").split())
     if not topic or len(topic) > 80:
@@ -514,13 +517,14 @@ def build_prompt(category: str, story: dict | None, recent_topics: list, allow_p
         "No emoji, hashtags or links in slides.")
     caption_rule = ("The caption may end with a soft mention of Surfacia and 'Link in bio.' because this topic "
                     "is about what we build. " if allow_product else
-                    "Do not mention Surfacia, Sentinis or 'link in bio'. ")
+                    "Do not mention Surfacia, Sentiness or 'link in bio'. ")
     parts.append(
-        "Caption: 2 to 4 short sentences that add context the slides do not, ending with a question or a nudge to "
-        "save or share. " + caption_rule + "No links and no hashtags in the caption text.")
+        "Caption: the FIRST line must be a keyword-rich sentence (under 125 characters) that names the topic in the "
+        "words people search for, because Instagram search indexes it. Then 1 to 3 short sentences that add context "
+        "the slides do not, ending with a question or a nudge to save or share. " + caption_rule + "No links and no hashtags in the caption text.")
     parts.append(
         'Return JSON: {"skip": false, "skip_reason": "", "topic": "<short label, max 8 words>", '
-        '"slides": ["..."], "caption": "...", "hashtags": ["6 to 10 relevant tags without the # sign"]}. '
+        '"slides": ["..."], "caption": "...", "hashtags": ["3 to 5 specific tags without the # sign"]}. '
         'If the material is too thin to make a trustworthy carousel, return {"skip": true, "skip_reason": "..."}.')
     if feedback:
         parts.append(f"Your previous answer was rejected: {feedback} Fix that and answer again.")
@@ -634,10 +638,13 @@ def prepare(dry_run: bool) -> int:
         return 0
     category, story, content = picked
 
-    photos = render.list_backgrounds(BACKGROUNDS_DIR)
-    if not photos:
-        warn("backgrounds/ has no photos; using generated gradient backgrounds. Add your images there.")
-    chosen = render.pick_backgrounds(photos, len(content["slides"]), history["recent_backgrounds"], rng)
+    if CARD_STYLE == "classic":
+        photos = render.list_backgrounds(BACKGROUNDS_DIR)
+        if not photos:
+            warn("backgrounds/ has no photos; using generated gradient backgrounds. Add your images there.")
+        chosen = render.pick_backgrounds(photos, len(content["slides"]), history["recent_backgrounds"], rng)
+    else:
+        chosen = [None] * len(content["slides"])      # the radar style draws its own background
 
     carousel_id = f"{datetime.now(timezone.utc):%Y-%m-%d}-{slugify(content['topic'])}"
     folder = OUT_DIR / carousel_id
@@ -647,7 +654,7 @@ def prepare(dry_run: bool) -> int:
     for i, text in enumerate(content["slides"]):
         path = render.render_slide(text, i, len(content["slides"]), folder / f"slide-{i + 1}.jpg",
                                    background=chosen[i], seed=seed + i, name=CARD_NAME, handle=CARD_HANDLE,
-                                   logo=LOGO_FILE if LOGO_FILE.is_file() else None, footer=footer)
+                                   logo=LOGO_FILE if LOGO_FILE.is_file() else None, footer=footer, style=CARD_STYLE)
         files.append(str(path.relative_to(ROOT)))
 
     caption = build_caption(content)

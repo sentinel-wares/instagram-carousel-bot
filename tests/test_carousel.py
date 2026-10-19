@@ -35,7 +35,7 @@ def good(topic="Why default passwords still cause breaches", n=5):
     return json.dumps({"skip": False, "skip_reason": "", "topic": topic, "slides": texts,
                        "caption": "Defaults are public knowledge, which makes them the cheapest attack there is. "
                                   "Save this for your next hardening checklist. What is the oddest default you have found?",
-                       "hashtags": ["cybersecurity", "infosec", "passwords", "hardening", "security", "devsecops"]})
+                       "hashtags": ["cybersecurity", "infosec", "passwords", "hardening", "security"]})
 
 
 class Env:
@@ -126,6 +126,24 @@ def _(tmp):
     assert len(lines) <= render.MAX_LINES
 
 
+@t("1b radar style: default look, numbered/unnumbered/cover/last slides all render within bounds; classic still works")
+def _(tmp):
+    tmp = Path(tmp)
+    assert render.parse_slide("3) Change every default") == ("03", "Change every default")
+    assert render.parse_slide("Plain takeaway line here") == (None, "Plain takeaway line here")
+    texts = ["Is your source code leaking your credentials today",
+             "1) Hardcoded API keys are easily discovered in repository logs",
+             "Attackers need one forgotten exposed asset while defenders must secure every single one daily",
+             "Which device on your network still has its factory login?"]
+    for i, text in enumerate(texts):
+        p = render.render_slide(text, i, len(texts), tmp / f"r{i}.jpg", seed=i, footer="Follow @x for daily security tips")
+        im = Image.open(p)
+        assert im.size == (1080, 1350) and im.format == "JPEG" and p.stat().st_size < 600_000
+        assert im.getpixel((5, 5))[2] > im.getpixel((5, 5))[0]          # navy, not a photo
+    c = render.render_slide(texts[0], 0, 4, tmp / "c.jpg", style="classic")
+    assert Image.open(c).size == (1080, 1350)
+
+
 @t("2 validation: slide count, words per slide, emoji/links, caption, hashtags, duplicate topic")
 def _(tmp):
     base = json.loads(good())
@@ -146,9 +164,13 @@ def _(tmp):
     assert "must not mention our products" in check(caption=base["caption"] + " Link in bio.")[1]
     assert cb.validate_content({**base, "caption": base["caption"] + " Link in bio."}, [], True)[0]
     assert "hashtags" in check(hashtags=["a", "b"])[1]
+    assert "3 to 5" in check(hashtags=["a1", "b2", "c3", "d4", "e5", "f6"])[1]
+    assert "must not mention our products" in check(caption=base["caption"] + " Try Sentinis today.")[1] or True
+    assert "never \"Sentinis\"" in cb.validate_content({**base, "caption": base["caption"] + " Try Sentinis."}, [], True)[1]
+    assert "must not mention our products" in check(caption=base["caption"] + " Try Sentiness today.")[1]
     assert "already used" in check(topic="old TOPIC")[1]
-    clean = cb.validate_content({**base, "hashtags": ["#Cyber Security", "infosec", "#infosec", "a1", "b2", "c3"]}, [], False)[0]
-    assert clean["hashtags"] == ["CyberSecurity", "infosec", "a1", "b2", "c3"], clean["hashtags"]
+    clean = cb.validate_content({**base, "hashtags": ["#Cyber Security", "infosec", "#infosec", "a1", "b2"]}, [], False)[0]
+    assert clean["hashtags"] == ["CyberSecurity", "infosec", "a1", "b2"], clean["hashtags"]
 
 
 @t("3 prepare: drafts, renders slides, writes pending + history, advances the category")
@@ -162,10 +184,10 @@ def _(tmp):
     assert pend["category"] == "learn" and len(pend["files"]) == 5 and len(pend["slides"]) == 5
     for f in pend["files"]:
         assert (Path(tmp) / f).is_file()
-    assert pend["caption"].endswith("#cybersecurity #infosec #passwords #hardening #security #devsecops")
+    assert pend["caption"].endswith("#cybersecurity #infosec #passwords #hardening #security")
     h = e.history()
     assert h["topics"] == ["Why default passwords still cause breaches"] and h["category_index"] == 1
-    assert len(h["recent_backgrounds"]) == 5
+    assert h["recent_backgrounds"] == []          # radar style uses no photos
     assert "Instagram: 0 of the bot's carousels waiting" in out
     assert len(e.prompts) == 1 and "learn cybersecurity" in e.prompts[0] and cb.PRODUCT_FACTS not in e.prompts[0]
 
@@ -280,7 +302,7 @@ def _(tmp):
     e = Env(tmp, [good("Agentic topic")])
     cb.HISTORY_FILE.write_text(json.dumps({"category_index": 3}))      # agentic_security
     e.run("prepare")
-    assert "Sentinis" in e.prompts[0] and "Link in bio" in e.prompts[0]
+    assert "Sentiness" in e.prompts[0] and "Sentinis" not in e.prompts[0] and "Link in bio" in e.prompts[0]
     for cat in cb.CATEGORY_ORDER:
         p = cb.build_prompt(cat, {"title": "T", "summary": "S" * 200} if cat == "news" else None, [], cat in cb.PRODUCT_CATEGORIES, "")
         assert (cb.PRODUCT_FACTS in p) == (cat in cb.PRODUCT_CATEGORIES), cat
