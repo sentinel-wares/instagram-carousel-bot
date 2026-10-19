@@ -231,7 +231,7 @@ def _(tmp):
     e.run("prepare")
     out, code = e.run("publish")
     assert code == 0, out
-    assert len(e.created) == 1
+    assert len(e.created) == 2                      # the carousel, then its Story
     inp = e.created[0]
     assert inp["channelId"] == IG and inp["mode"] == "addToQueue" and inp["schedulingType"] == "automatic"
     assert inp["aiAssisted"] is True and inp["metadata"] == {"instagram": {"type": "post", "shouldShareToFeed": True, "isAiGenerated": False}}
@@ -240,9 +240,35 @@ def _(tmp):
     assert first["url"].startswith("https://raw.githubusercontent.com/sentinel-wares/instagram-carousel-bot/media/")
     assert first["url"].endswith("/slide-1.jpg") and first["metadata"]["altText"].startswith("Slide 1: ")
     assert inp["text"].startswith("Defaults are public knowledge")
+    story = e.created[1]
+    assert story["channelId"] == IG and story["metadata"] == {"instagram": {"type": "story", "shouldShareToFeed": False}}
+    assert len(story["assets"]) == 1 and story["assets"][0]["image"]["url"].endswith("/story.jpg")
+    assert story["mode"] == "customScheduled" and story["dueAt"] == "2026-10-13T04:10:00.000Z", story
     assert not cb.PENDING_FILE.exists()
-    assert e.history()["bot_posts"]["instagram"] == ["p" * 23 + "1"]
-    assert len(e.checked) == 8
+    h = e.history()["bot_posts"]
+    assert h["instagram"] == ["p" * 23 + "1"] and h["instagram_stories"] == ["p" * 23 + "2"]
+    assert len(e.checked) == 9
+
+
+@t("7b Story: a rejected Story never undoes the carousel; INSTAGRAM_STORY=0 skips it; story.jpg is 1080x1920")
+def _(tmp):
+    e = Env(tmp, [good()])
+    e.run("prepare")
+    pend = json.loads(cb.PENDING_FILE.read_text())
+    assert Image.open(Path(tmp) / pend["story_file"]).size == (1080, 1920)
+    orig = cb.queue_story
+    cb.queue_story = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("Buffer rejected the Story"))
+    out, code = e.run("publish")
+    cb.queue_story = orig
+    assert code == 0 and "Story was not" in out and len(e.created) == 1, out
+    assert e.history()["bot_posts"]["instagram"] and not cb.PENDING_FILE.exists()
+    cb.STORY_ENABLED = False
+    e2 = Env(tmp, [good("Another story topic")])
+    e2.run("prepare")
+    assert json.loads(cb.PENDING_FILE.read_text())["story_file"] is None
+    e2.run("publish")
+    assert len(e2.created) == 1
+    cb.STORY_ENABLED = True
 
 
 @t("8 publish: Buffer rejects it -> exit 1, pending discarded (never retried blindly), nothing recorded")
@@ -342,7 +368,7 @@ def _(tmp):
     os.environ.pop("DRY_RUN")
     assert code == 0 and "DRY_RUN=1 set" in out and not e.created
     assert not cb.PENDING_FILE.exists() and e.history() is None
-    assert len(list((Path(tmp) / "out").rglob("*.jpg"))) == 8
+    assert len(list((Path(tmp) / "out").rglob("*.jpg"))) == 9
 
 
 @t("16 gemini fallback model and env_or")

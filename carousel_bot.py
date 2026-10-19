@@ -21,7 +21,7 @@ import random
 import re
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
@@ -63,6 +63,8 @@ MIN_SUMMARY_CHARS = int(env_or("MIN_SUMMARY_CHARS", "120"))
 # Instagram's "AI info" label. Off by default: the slide text is written by an AI, the photos are stock-style
 # backgrounds. Set the variable INSTAGRAM_AI_LABEL=1 to turn the label on for every post.
 INSTAGRAM_AI_LABEL = env_or("INSTAGRAM_AI_LABEL", "0").lower() in ("1", "true", "yes")
+STORY_ENABLED = env_or("INSTAGRAM_STORY", "1") != "0"       # also queue a 9:16 Story teaser for each carousel
+STORY_DELAY_MIN = 10                                    # Story goes out this many minutes after the carousel
 INSTAGRAM_POST_TYPE = env_or("INSTAGRAM_POST_TYPE", "post")   # Buffer: "post" (multi-image = carousel)
 MEDIA_BRANCH = "media"
 
@@ -346,6 +348,29 @@ def queue_carousel(channel_id: str, caption: str, image_urls: list, alt_texts: l
     result = data["createPost"]
     if result["__typename"] != "PostActionSuccess":
         raise RuntimeError(f"Buffer rejected the carousel ({result['__typename']}): {result.get('message')}")
+    return result["post"]
+
+
+def queue_story(channel_id: str, image_url: str, alt: str, due_at: str | None) -> dict:
+    """Queue a single-image Instagram Story. Scheduled a few minutes after the carousel when its time is
+    known, otherwise added to the queue. Never retried (could double-post)."""
+    inp = {"channelId": channel_id, "schedulingType": "automatic", "aiAssisted": True,
+           "assets": [{"image": {"url": image_url, "metadata": {"altText": alt}}}],
+           "metadata": {"instagram": {"type": "story", "shouldShareToFeed": False}}}
+    due = None
+    if due_at:
+        try:
+            due = datetime.fromisoformat(due_at.replace("Z", "+00:00")) + timedelta(minutes=STORY_DELAY_MIN)
+        except ValueError:
+            due = None
+    if due:
+        inp.update({"mode": "customScheduled", "dueAt": due.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")})
+    else:
+        inp["mode"] = "addToQueue"
+    data = buffer_request(CREATE_POST_MUTATION, {"input": inp}, retries=1)
+    result = data["createPost"]
+    if result["__typename"] != "PostActionSuccess":
+        raise RuntimeError(f"Buffer rejected the Story ({result['__typename']}): {result.get('message')}")
     return result["post"]
 
 
@@ -662,6 +687,11 @@ def prepare(dry_run: bool) -> int:
                                    logo=LOGO_FILE if LOGO_FILE.is_file() else None, footer=footer, style=CARD_STYLE)
         files.append(str(path.relative_to(ROOT)))
 
+    story_file = None
+    if STORY_ENABLED:
+        story_path = render.render_story(content["slides"][0], folder / "story.jpg", seed=seed)
+        story_file = str(story_path.relative_to(ROOT))
+
     caption = build_caption(content)
     log(f"----- CAROUSEL: {content['topic']} ({category}) -----")
     for i, text in enumerate(content["slides"], 1):
@@ -678,7 +708,8 @@ def prepare(dry_run: bool) -> int:
     history["recent_backgrounds"] += [p.name for p in chosen if p]
     save_history(history)
     save_pending({"id": carousel_id, "category": category, "topic": content["topic"], "caption": caption,
-                  "slides": content["slides"], "files": files, "created": datetime.now(timezone.utc).isoformat()})
+                  "slides": content["slides"], "files": files, "story_file": story_file,
+                  "created": datetime.now(timezone.utc).isoformat()})
     return 0
 
 
@@ -743,6 +774,19 @@ def publish() -> int:
     history = load_history()
     history["bot_posts"].setdefault("instagram", []).append(post["id"])
     save_history(history)
+
+    if STORY_ENABLED and pending.get("story_file"):       # a Story failure must never undo the carousel
+        try:
+            story_url = f"{urls[0].rsplit('/', 1)[0]}/{Path(pending['story_file']).name}"
+            if not wait_for_images([story_url]):
+                raise RuntimeError("the Story image is not publicly reachable")
+            story = queue_story(channel, story_url, f"New carousel: {pending['slides'][0]}", post.get("dueAt"))
+            log(f"[ok] queued Instagram Story: post id={story['id']} due={story.get('dueAt')}")
+            history = load_history()
+            history["bot_posts"].setdefault("instagram_stories", []).append(story["id"])
+            save_history(history)
+        except Exception as exc:
+            warn(f"the carousel is queued, but the Story was not: {exc}")
     PENDING_FILE.unlink(missing_ok=True)
     return 0
 

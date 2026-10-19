@@ -231,7 +231,7 @@ def parse_slide(text: str):
     return None, " ".join(text.split())
 
 
-def _radar_dots(rng: random.Random, center, avoid: list, count: int = 8) -> list:
+def _radar_dots(rng: random.Random, center, avoid: list, count: int = 8, h: int = H) -> list:
     """Seeded dot layout around the rings, kept away from the text and header areas."""
     cx, cy = center
     dots, tries = [], 0
@@ -240,7 +240,7 @@ def _radar_dots(rng: random.Random, center, avoid: list, count: int = 8) -> list
         ang = rng.uniform(0, 2 * math.pi)
         dist = rng.uniform(60, 460)
         x, y = cx + dist * math.cos(ang), cy + dist * math.sin(ang)
-        if not (40 < x < W - 40 and 40 < y < H - 40):
+        if not (40 < x < W - 40 and 40 < y < h - 40):
             continue
         if any(x0 - 30 <= x <= x1 + 30 and y0 - 30 <= y <= y1 + 30 for x0, y0, x1, y1 in avoid):
             continue
@@ -248,13 +248,13 @@ def _radar_dots(rng: random.Random, center, avoid: list, count: int = 8) -> list
     return dots
 
 
-def _radar_background(center, seed: int, avoid: list) -> Image.Image:
-    strip = Image.new("RGB", (1, H * SS))
+def _radar_background(center, seed: int, avoid: list, h: int = H) -> Image.Image:
+    strip = Image.new("RGB", (1, h * SS))
     px = strip.load()
-    for y in range(H * SS):
-        t = y / (H * SS - 1)
+    for y in range(h * SS):
+        t = y / (h * SS - 1)
         px[0, y] = tuple(int(NAVY_T[i] + (NAVY_B[i] - NAVY_T[i]) * t) for i in range(3))
-    base = strip.resize((W * SS, H * SS)).convert("RGBA")
+    base = strip.resize((W * SS, h * SS)).convert("RGBA")
     ring = Image.new("RGBA", base.size, (0, 0, 0, 0))
     rd = ImageDraw.Draw(ring)
     cx, cy = center
@@ -262,7 +262,7 @@ def _radar_background(center, seed: int, avoid: list) -> Image.Image:
         rd.ellipse([_s(cx - r), _s(cy - r), _s(cx + r), _s(cy + r)], outline=AMBER + (a,), width=_s(2))
     rd.line([_s(cx - 760), _s(cy), _s(cx + 760), _s(cy)], fill=AMBER + (28,), width=_s(1.6))
     rd.line([_s(cx), _s(cy - 760), _s(cx), _s(cy + 760)], fill=AMBER + (28,), width=_s(1.6))
-    for x, y, rr, a in _radar_dots(random.Random(seed), center, avoid):
+    for x, y, rr, a in _radar_dots(random.Random(seed), center, avoid, h=h):
         rd.ellipse([_s(x - rr * 2.6), _s(y - rr * 2.6), _s(x + rr * 2.6), _s(y + rr * 2.6)], fill=AMBER + (26,))
         rd.ellipse([_s(x - rr), _s(y - rr), _s(x + rr), _s(y + rr)], fill=AMBER + (a,))
     return Image.alpha_composite(base, ring)
@@ -293,13 +293,14 @@ def _wrap_words(words: list, font, max_w: float) -> list:
     return lines
 
 
-def _fit_lines(words: list, top: float, sizes, max_lines: int, line_ratio: float, face: str):
+def _fit_lines(words: list, top: float, sizes, max_lines: int, line_ratio: float, face: str,
+               bottom: float = TEXT_BOTTOM):
     """Largest size whose wrapped text has <= max_lines and ends above TEXT_BOTTOM."""
     for size in sizes:
         font = _rf(face, size)
         lines = _wrap_words(words, font, TEXT_W)
         line_h = size * line_ratio
-        if len(lines) <= max_lines and top + len(lines) * line_h <= TEXT_BOTTOM:
+        if len(lines) <= max_lines and top + len(lines) * line_h <= bottom:
             return font, lines, line_h
     return font, lines, line_h
 
@@ -375,6 +376,38 @@ def _render_radar(text: str, index: int, total: int, out_path: Path, *, seed: in
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     img.convert("RGB").resize((W, H), Image.LANCZOS).save(out_path, "JPEG", quality=92, optimize=True)
+    return out_path
+
+
+STORY_W, STORY_H = 1080, 1920
+
+
+def render_story(text: str, out_path: Path, *, seed: int = 0) -> Path:
+    """A 1080x1920 (9:16) Instagram Story teaser for a new carousel: the hook in the radar style.
+    Text stays inside the Story safe zone (clear of the top profile bar and the bottom reply bar)."""
+    _, body = parse_slide(text)
+    words = body.split()
+    colours = [WHITE] * len(words)
+    colours[-1] = AMBER
+    top = 700
+    font, lines, line_h = _fit_lines(list(zip(words, colours)), top, range(100, 63, -4), 6, 1.18,
+                                     "Inter-ExtraBold.otf", bottom=1420)
+    avoid = [(MARGIN, top - 90, W - MARGIN, top + len(lines) * line_h), (0, 230, W, 330), (0, 1440, W, 1580)]
+    img = _radar_background((880, 480), seed, avoid, h=STORY_H)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([_s(MARGIN), _s(264), _s(MARGIN + 12), _s(300)], radius=_s(3), fill=AMBER)
+    _spaced(d, MARGIN + 32, 266, "SENTINELWARES", _rf("Inter-Bold.otf", 30), WHITE, 5)
+    _spaced(d, MARGIN, top - 80, "NEW POST", _rf("Inter-Bold.otf", 28), AMBER, 5)
+    _draw_lines(d, lines, font, MARGIN, top, line_h)
+    cue = "New carousel on our feed"
+    f_cue = _rf("Inter-SemiBold.otf", 34)
+    cw = f_cue.getlength(cue) / SS
+    d.rounded_rectangle([_s(MARGIN), _s(1450), _s(MARGIN + cw + 96), _s(1530)], radius=_s(40), fill=AMBER)
+    d.text((_s(MARGIN + 36), _s(1468)), cue, font=f_cue, fill=NAVY_T)
+    d.text((_s(MARGIN + cw + 60), _s(1466)), "\u2193", font=f_cue, fill=NAVY_T)
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    img.convert("RGB").resize((STORY_W, STORY_H), Image.LANCZOS).save(out_path, "JPEG", quality=92, optimize=True)
     return out_path
 
 
