@@ -54,7 +54,8 @@ CARD_HANDLE = env_or("CARD_HANDLE", "@sentinelwares")
 CARD_STYLE = env_or("CARD_STYLE", "radar").lower()     # "radar" (navy/amber) or "classic" (photo + white card)
 CARD_FOOTER = env_or("CARD_FOOTER", "1") != "0"        # "Follow @handle ..." on the last slide
 QUEUE_TARGET = int(env_or("QUEUE_TARGET", "1"))          # own carousels allowed to wait in the queue
-MAX_SLIDES = int(env_or("MAX_SLIDES", "12"))
+BUFFER_MAX_ASSETS = 10                                  # Buffer rejects Instagram posts with more than 10 assets
+MAX_SLIDES = min(int(env_or("MAX_SLIDES", "10")), BUFFER_MAX_ASSETS)
 MIN_SLIDES = 8
 MIN_WORDS, MAX_WORDS = 5, 15
 MAX_AGE_DAYS = float(env_or("MAX_AGE_DAYS", "2"))
@@ -511,8 +512,8 @@ def build_prompt(category: str, story: dict | None, recent_topics: list, allow_p
         parts.append("Topics already covered recently (do not repeat them):\n- " + "\n- ".join(recent_topics[-25:]))
     parts.append(
         f"Slides: {MIN_SLIDES} to {MAX_SLIDES}. Pick the count the material supports, do not pad. Rough guide: "
-        f"quotes and short ideas {MIN_SLIDES} to 9; news stories 8 to 10 (what happened, why it matters, who is "
-        f"affected, what to do); how-to, learning and list topics 10 to {MAX_SLIDES}. EVERY slide is {MIN_WORDS} to "
+        f"quotes and short ideas {MIN_SLIDES} to 9; news stories 8 to {MAX_SLIDES} (what happened, why it matters, who is "
+        f"affected, what to do); how-to, learning and list topics {MAX_SLIDES - 1} to {MAX_SLIDES}. EVERY slide is {MIN_WORDS} to "
         f"{MAX_WORDS} words, one idea each, written like a short punchy line shown on a card. Slide 1 is a "
         "scroll-stopping hook that creates curiosity. The middle slides build the story: context, then substance "
         "(number them like '1) ...' when it is a list), then an example or consequence. The second-to-last slide "

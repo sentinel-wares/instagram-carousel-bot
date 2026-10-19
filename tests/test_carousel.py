@@ -56,7 +56,7 @@ class Env:
         for k in ("GITHUB_REPOSITORY", "IMAGES_BASE_URL", "BUFFER_CHANNEL_INSTAGRAM", "BUFFER_ORG_ID", "DRY_RUN"):
             os.environ.pop(k, None)
         os.environ.update({"BUFFER_API_KEY": "k\n", "GEMINI_API_KEY": "g\n", "GITHUB_REPOSITORY": "sentinel-wares/instagram-carousel-bot"})
-        cb.QUEUE_TARGET, cb.MAX_SLIDES, cb.CARD_FOOTER = 1, 12, True
+        cb.QUEUE_TARGET, cb.MAX_SLIDES, cb.CARD_FOOTER = 1, 10, True
         self.created, self.prompts, self.checked = [], [], []
         self.waiting = waiting or []
         self.channels = [{"id": IG, "service": "instagram", "name": "sentinelwares", "isDisconnected": False,
@@ -157,8 +157,8 @@ def _(tmp):
         return cb.validate_content(d, ["Old topic"], allow_product=False)
 
     assert check()[0]["topic"].startswith("Why default")
-    assert "need 8 to 12" in check(slides=base["slides"][:7])[1]
-    assert "need 8 to 12" in check(slides=base["slides"] * 2)[1]
+    assert "need 8 to 10" in check(slides=base["slides"][:7])[1]
+    assert "need 8 to 10" in check(slides=base["slides"] * 2)[1]
     assert "must have 5 to 15" in check(slides=["Too short"] + base["slides"][1:])[1]
     assert "must have 5 to 15" in check(slides=["word " * 16] + base["slides"][1:])[1]
     assert "hashtag, link or emoji" in check(slides=["Check https://x.io for the details today"] + base["slides"][1:])[1]
