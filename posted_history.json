@@ -12,13 +12,14 @@
     "SiteGuard WAF OS command injection vulnerability",
     "Cross-Site Scripting XSS vulnerabilities",
     "Agentic security and autonomous vulnerability validation",
-    "Pros and Cons of Network Segmentation"
+    "Pros and Cons of Network Segmentation",
+    "Dependency Management Security"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
     "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/"
   ],
-  "category_index": 5,
+  "category_index": 6,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -74,12 +75,14 @@
       "6ad5bc2ffe198605b4cc4ad3",
       "6ad5c51e38c1835cd442d0f4",
       "6ad72e6e9aa7670040a78abc",
-      "6ad87fcb7143aca6ab063a75"
+      "6ad87fcb7143aca6ab063a75",
+      "6ad9d225a013397d9328c546"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
       "6ad72e6e9aa7670040a78ae3",
-      "6ad87fcc7f2a5e272ec94f3a"
+      "6ad87fcc7f2a5e272ec94f3a",
+      "6ad9d226aefa17e341fa779c"
     ]
   }
 }
