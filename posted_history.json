@@ -15,13 +15,14 @@
     "Pros and Cons of Network Segmentation",
     "Dependency Management Security",
     "Attack Surface Management and Continuous Monitoring",
-    "The paradox of security investments"
+    "The paradox of security investments",
+    "Common beginner cybersecurity mistake"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
     "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/"
   ],
-  "category_index": 0,
+  "category_index": 1,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -80,7 +81,8 @@
       "6ad87fcb7143aca6ab063a75",
       "6ad9d225a013397d9328c546",
       "6adb22272baa602d02411eb3",
-      "6adc6d768b3d437ddcab8243"
+      "6adc6d768b3d437ddcab8243",
+      "6addc3696887a2efc1f7238f"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -88,7 +90,8 @@
       "6ad87fcc7f2a5e272ec94f3a",
       "6ad9d226aefa17e341fa779c",
       "6adb222881bbc7cbcf5bab28",
-      "6adc6d763d5b27036b749471"
+      "6adc6d763d5b27036b749471",
+      "6addc36a0b5343d070c249e7"
     ]
   }
 }
