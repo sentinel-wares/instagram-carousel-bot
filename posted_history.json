@@ -16,13 +16,15 @@
     "Dependency Management Security",
     "Attack Surface Management and Continuous Monitoring",
     "The paradox of security investments",
-    "Common beginner cybersecurity mistake"
+    "Common beginner cybersecurity mistake",
+    "AI model training security"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
-    "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/"
+    "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/",
+    "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html"
   ],
-  "category_index": 1,
+  "category_index": 2,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -82,7 +84,8 @@
       "6ad9d225a013397d9328c546",
       "6adb22272baa602d02411eb3",
       "6adc6d768b3d437ddcab8243",
-      "6addc3696887a2efc1f7238f"
+      "6addc3696887a2efc1f7238f",
+      "6adf1eabfce97d27e51071a1"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -91,7 +94,8 @@
       "6ad9d226aefa17e341fa779c",
       "6adb222881bbc7cbcf5bab28",
       "6adc6d763d5b27036b749471",
-      "6addc36a0b5343d070c249e7"
+      "6addc36a0b5343d070c249e7",
+      "6adf1eab78f6291673ba5310"
     ]
   }
 }
