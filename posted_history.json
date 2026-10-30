@@ -20,14 +20,15 @@
     "AI model training security",
     "Insecure Direct Object Reference vulnerabilities",
     "Automated Vulnerability Validation with Sentiness",
-    "Pros and Cons of Managed Security Services"
+    "Pros and Cons of Managed Security Services",
+    "Input Validation for Secure Development"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
     "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/",
     "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html"
   ],
-  "category_index": 5,
+  "category_index": 6,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -91,7 +92,8 @@
       "6adf1eabfce97d27e51071a1",
       "6ae06f61421e91122f79d481",
       "6ae1cb75979a56d9e57d14d9",
-      "6ae32260dda228e8b1e18014"
+      "6ae32260dda228e8b1e18014",
+      "6ae474281c1ab1e7bc2f6790"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -104,7 +106,8 @@
       "6adf1eab78f6291673ba5310",
       "6ae06f62158d7a72af91cde5",
       "6ae1cb76979a56d9e57d1526",
-      "6ae322601db2603c2d98c313"
+      "6ae322601db2603c2d98c313",
+      "6ae4742914812ff59675441f"
     ]
   }
 }
