@@ -24,14 +24,16 @@
     "Input Validation for Secure Development",
     "Attack Surface Management and Exposure",
     "Security mindset and risk management",
-    "Cybersecurity documentation reading habits"
+    "Cybersecurity documentation reading habits",
+    "Langflow Authentication Vulnerabilities"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
     "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/",
-    "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html"
+    "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html",
+    "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html"
   ],
-  "category_index": 1,
+  "category_index": 2,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -99,7 +101,8 @@
       "6ae474281c1ab1e7bc2f6790",
       "6ae5bda9ceb491e585ece74a",
       "6ae71b3af0984eef335e2938",
-      "6ae87a6d6c56e41b9951a985"
+      "6ae87a6d6c56e41b9951a985",
+      "6ae9c6bce9a91b5943cd855e"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -116,7 +119,8 @@
       "6ae4742914812ff59675441f",
       "6ae5bdaaa1145743499acbcd",
       "6ae71b3b37c1acd2a0fce9a8",
-      "6ae87a6d6ee21de95779c5d1"
+      "6ae87a6d6ee21de95779c5d1",
+      "6ae9c6bc47205d2c399602e0"
     ]
   }
 }
