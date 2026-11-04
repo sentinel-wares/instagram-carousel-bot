@@ -25,7 +25,8 @@
     "Attack Surface Management and Exposure",
     "Security mindset and risk management",
     "Cybersecurity documentation reading habits",
-    "Langflow Authentication Vulnerabilities"
+    "Langflow Authentication Vulnerabilities",
+    "Broken Access Control Vulnerabilities"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -33,7 +34,7 @@
     "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html",
     "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html"
   ],
-  "category_index": 2,
+  "category_index": 3,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -102,7 +103,8 @@
       "6ae5bda9ceb491e585ece74a",
       "6ae71b3af0984eef335e2938",
       "6ae87a6d6c56e41b9951a985",
-      "6ae9c6bce9a91b5943cd855e"
+      "6ae9c6bce9a91b5943cd855e",
+      "6aeb1bd5dabf2501c091a93b"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -120,7 +122,8 @@
       "6ae5bdaaa1145743499acbcd",
       "6ae71b3b37c1acd2a0fce9a8",
       "6ae87a6d6ee21de95779c5d1",
-      "6ae9c6bc47205d2c399602e0"
+      "6ae9c6bc47205d2c399602e0",
+      "6aeb1bd5400b4e9be06bf828"
     ]
   }
 }
