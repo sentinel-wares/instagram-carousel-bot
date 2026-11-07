@@ -28,7 +28,8 @@
     "Langflow Authentication Vulnerabilities",
     "Broken Access Control Vulnerabilities",
     "Agentic Security AI Agents",
-    "Pros and Cons of Secrets Management Tools"
+    "Pros and Cons of Secrets Management Tools",
+    "Implementing Principle of Least Privilege"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -36,7 +37,7 @@
     "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html",
     "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html"
   ],
-  "category_index": 5,
+  "category_index": 6,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -108,7 +109,8 @@
       "6ae9c6bce9a91b5943cd855e",
       "6aeb1bd5dabf2501c091a93b",
       "6aec6c7d507ac1b75df6dbf7",
-      "6aedbd8a05414bc10aeb9bc0"
+      "6aedbd8a05414bc10aeb9bc0",
+      "6aef0274d6bbae6fa17eecd9"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -129,7 +131,8 @@
       "6ae9c6bc47205d2c399602e0",
       "6aeb1bd5400b4e9be06bf828",
       "6aec6c7ee5718a454c3dfb0b",
-      "6aedbd8a36c33a1336268ca6"
+      "6aedbd8a36c33a1336268ca6",
+      "6aef0275229bf05daf43c2e4"
     ]
   }
 }
