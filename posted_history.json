@@ -31,7 +31,8 @@
     "Pros and Cons of Secrets Management Tools",
     "Implementing Principle of Least Privilege",
     "Attack Surface Exposure and Continuous Monitoring",
-    "Security mindset philosophy"
+    "Security mindset philosophy",
+    "Cybersecurity learning habits"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -39,7 +40,7 @@
     "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html",
     "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html"
   ],
-  "category_index": 0,
+  "category_index": 1,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -114,7 +115,8 @@
       "6aedbd8a05414bc10aeb9bc0",
       "6aef0274d6bbae6fa17eecd9",
       "6af055dc51492b796e31a2d3",
-      "6af1bbcb95b09d04823c2a71"
+      "6af1bbcb95b09d04823c2a71",
+      "6af3074d8b228afcc9606c7e"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -138,7 +140,8 @@
       "6aedbd8a36c33a1336268ca6",
       "6aef0275229bf05daf43c2e4",
       "6af055dd9214322f684a1614",
-      "6af1bbcbcc5679751d111708"
+      "6af1bbcbcc5679751d111708",
+      "6af3074e07659da4c6d78076"
     ]
   }
 }
