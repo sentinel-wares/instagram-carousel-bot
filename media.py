@@ -59,11 +59,12 @@ def publish_media(src_root: Path, ids: list, remote_url: str, *, keep_days: int 
         work.mkdir()
         _git(["init", "-q", "-b", BRANCH], work)
         _git(["remote", "add", "origin", remote_url], work, token)
-        try:   # keep what earlier runs published (the branch may not exist yet)
+        # Keep what earlier runs published. Only a branch that genuinely does not exist yet may be
+        # skipped: any other fetch failure must abort, or the force-push below would wipe the
+        # images of carousels that are still waiting in Buffer's queue.
+        if _git(["ls-remote", "--heads", "origin", BRANCH], work, token).strip():
             _git(["fetch", "-q", "--depth=1", "origin", BRANCH], work, token)
             _git(["checkout", "-q", "-f", "FETCH_HEAD", "--", "."], work, token)
-        except RuntimeError:
-            pass
         prune_old(work, keep_days, now)
         for cid in ids:
             dest = work / cid
