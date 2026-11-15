@@ -34,7 +34,8 @@
     "Security mindset philosophy",
     "Cybersecurity learning habits",
     "AntiFox AI platform security breach",
-    "Server-Side Request Forgery vulnerabilities"
+    "Server-Side Request Forgery vulnerabilities",
+    "Autonomous vulnerability verification with Sentiness"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -43,7 +44,7 @@
     "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html",
     "https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html"
   ],
-  "category_index": 3,
+  "category_index": 4,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -121,7 +122,8 @@
       "6af1bbcb95b09d04823c2a71",
       "6af3074d8b228afcc9606c7e",
       "6af6f8dc10ced6793b31585d",
-      "6af84153bb36d00909063ab8"
+      "6af84153bb36d00909063ab8",
+      "6af99aa476c23bf1c7779f39"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -148,7 +150,8 @@
       "6af1bbcbcc5679751d111708",
       "6af3074e07659da4c6d78076",
       "6af6f8dc66ff9797d87cfd39",
-      "6af84154d16af15d4d0dc648"
+      "6af84154d16af15d4d0dc648",
+      "6af99aa4e5a113497ae3bdde"
     ]
   }
 }
