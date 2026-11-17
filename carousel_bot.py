@@ -70,7 +70,7 @@ MEDIA_BRANCH = "media"
 
 # Topic rotation: one per day, so every category comes round about weekly.
 CATEGORIES = {
-    "learn": "how to learn cybersecurity: a practical roadmap step, habit, free resource type, or a common beginner mistake",
+    "learn": "how to learn cybersecurity: ONE specific, concrete skill, tool or beginner mistake (not general advice about mindset or learning strategy)",
     "news": "a recent cybersecurity news story (use ONLY the story supplied below)",
     "vulnerabilities": "one class of vulnerability explained simply: what it is, why it happens, how to prevent it (defensive framing only)",
     "agentic_security": "agentic security: AI agents doing security work, autonomous penetration testing, validating findings automatically",
@@ -79,7 +79,11 @@ CATEGORIES = {
     "asm_exposure": "attack surface management and exposure: what organisations leave exposed and why continuous monitoring matters",
     "quotes": "an ORIGINAL short, thought-provoking line about security (never attributed to any real person)",
 }
-CATEGORY_ORDER = ["learn", "news", "vulnerabilities", "agentic_security", "pros_cons", "dev_it", "asm_exposure", "quotes"]
+# Specific topics (a named vulnerability, a real news story, a concrete comparison) got the most views;
+# vague "mindset" / quote posts the least. So news and vulnerabilities appear twice per cycle and "quotes"
+# is no longer scheduled. The index saved in the history is a POSITION in this list, so repeats are fine.
+CATEGORY_ORDER = ["learn", "news", "vulnerabilities", "agentic_security", "news", "pros_cons",
+                  "vulnerabilities", "asm_exposure", "dev_it"]
 PRODUCT_CATEGORIES = {"agentic_security", "asm_exposure"}   # the only ones that may mention our product
 
 PRODUCT_FACTS = (
@@ -600,7 +604,8 @@ def choose_content(history: dict, rng: random.Random):
     Returns (category, story, content) or None."""
     start = history["category_index"]
     for step in range(len(CATEGORY_ORDER)):
-        category = CATEGORY_ORDER[(start + step) % len(CATEGORY_ORDER)]
+        pos = (start + step) % len(CATEGORY_ORDER)
+        category = CATEGORY_ORDER[pos]
         story = None
         if category == "news":
             candidates = rank_news(fetch_news(), set(history["links"]))
@@ -614,7 +619,7 @@ def choose_content(history: dict, rng: random.Random):
         if story and (content or skip_reason is not None):
             history["links"].append(story["link"])        # never retry the same story
         if content:
-            history["category_index"] = (CATEGORY_ORDER.index(category) + 1) % len(CATEGORY_ORDER)
+            history["category_index"] = (pos + 1) % len(CATEGORY_ORDER)
             return category, story, content
         if skip_reason is not None:
             log(f"[info] Gemini skipped: {skip_reason}")
