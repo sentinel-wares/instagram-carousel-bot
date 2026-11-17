@@ -485,4 +485,13 @@ def _(tmp):
     os.environ.pop("GITHUB_TOKEN")
 
 
+@t("20 repeated categories: the saved index is a position, so the rotation never gets stuck")
+def _(tmp):
+    assert "quotes" not in cb.CATEGORY_ORDER and cb.CATEGORY_ORDER.count("news") == 2
+    e = Env(tmp, [good("Second news slot")], news=[])
+    cb.HISTORY_FILE.write_text(json.dumps({"category_index": 6}))      # second "vulnerabilities" slot
+    e.run("prepare")
+    assert e.history()["category_index"] == 7, e.history()["category_index"]
+
+
 print("ALL PASSED")
