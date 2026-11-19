@@ -38,7 +38,8 @@
     "Autonomous vulnerability verification with Sentiness",
     "Static Application Security Testing Pros and Cons",
     "Pros and Cons of Security Observability",
-    "Cross-Site Scripting vulnerabilities"
+    "Cross-Site Scripting vulnerabilities",
+    "Digital asset visibility and risk reduction"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -47,7 +48,7 @@
     "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html",
     "https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html"
   ],
-  "category_index": 7,
+  "category_index": 8,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -129,7 +130,8 @@
       "6af99aa476c23bf1c7779f39",
       "6afa86e58e87c256a3b110d8",
       "6afc4b8655207cffaeeaa9d9",
-      "6afd9b2bc9f673f3ba8219bb"
+      "6afd9b2bc9f673f3ba8219bb",
+      "6afeea762d4643e56c92a557"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -160,7 +162,8 @@
       "6af99aa4e5a113497ae3bdde",
       "6afa86e6ff465c57dad1b265",
       "6afc4b87223fb0bae76e924f",
-      "6afd9b2c3cc95fb47ceef22d"
+      "6afd9b2c3cc95fb47ceef22d",
+      "6afeea778840f68c22beeec9"
     ]
   }
 }
