@@ -40,7 +40,8 @@
     "Pros and Cons of Security Observability",
     "Cross-Site Scripting vulnerabilities",
     "Digital asset visibility and risk reduction",
-    "Environment variable security practices"
+    "Environment variable security practices",
+    "Hardcoding API Keys"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -49,7 +50,7 @@
     "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html",
     "https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html"
   ],
-  "category_index": 0,
+  "category_index": 1,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -133,7 +134,8 @@
       "6afc4b8655207cffaeeaa9d9",
       "6afd9b2bc9f673f3ba8219bb",
       "6afeea762d4643e56c92a557",
-      "6b003c0d234b6bb6ee93f68f"
+      "6b003c0d234b6bb6ee93f68f",
+      "6b01878a943aa0abf4542c72"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -166,7 +168,8 @@
       "6afc4b87223fb0bae76e924f",
       "6afd9b2c3cc95fb47ceef22d",
       "6afeea778840f68c22beeec9",
-      "6b003c0efc5b97f0f8044119"
+      "6b003c0efc5b97f0f8044119",
+      "6b01878b846b0ee90704820a"
     ]
   }
 }
