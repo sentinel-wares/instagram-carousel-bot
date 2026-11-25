@@ -42,7 +42,8 @@
     "Digital asset visibility and risk reduction",
     "Environment variable security practices",
     "Hardcoding API Keys",
-    "AI agents and zero-day vulnerabilities"
+    "AI agents and zero-day vulnerabilities",
+    "Understanding SQL Injection Vulnerabilities"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -52,7 +53,7 @@
     "https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html",
     "https://thehackernews.com/2026/11/attackers-ai-agents-found-zero-day-in.html"
   ],
-  "category_index": 2,
+  "category_index": 3,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -138,7 +139,8 @@
       "6afeea762d4643e56c92a557",
       "6b003c0d234b6bb6ee93f68f",
       "6b01878a943aa0abf4542c72",
-      "6b02dc1dcc364169c14ff0b8"
+      "6b02dc1dcc364169c14ff0b8",
+      "6b06e6e9868e27743dfc6473"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -173,7 +175,8 @@
       "6afeea778840f68c22beeec9",
       "6b003c0efc5b97f0f8044119",
       "6b01878b846b0ee90704820a",
-      "6b02dc1dc72676f5e927d8d8"
+      "6b02dc1dc72676f5e927d8d8",
+      "6b06e6e9d0aab12c5e41400f"
     ]
   }
 }
