@@ -44,7 +44,8 @@
     "Hardcoding API Keys",
     "AI agents and zero-day vulnerabilities",
     "Understanding SQL Injection Vulnerabilities",
-    "Agentic AI in Cybersecurity Workflows"
+    "Agentic AI in Cybersecurity Workflows",
+    "AI in Penetration Testing Workflows"
   ],
   "links": [
     "https://thehackernews.com/2026/10/critical-sonicwall-sma-1000-flaw.html",
@@ -52,9 +53,10 @@
     "https://thehackernews.com/2026/10/openai-ai-agents-demonstrate-vm-escapes.html",
     "https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html",
     "https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html",
-    "https://thehackernews.com/2026/11/attackers-ai-agents-found-zero-day-in.html"
+    "https://thehackernews.com/2026/11/attackers-ai-agents-found-zero-day-in.html",
+    "https://www.bleepingcomputer.com/news/security/more-pentests-without-more-pentesters-where-ai-safely-helps/"
   ],
-  "category_index": 4,
+  "category_index": 5,
   "recent_backgrounds": [
     "lock-network.jpg",
     "datacenter.jpg",
@@ -142,7 +144,8 @@
       "6b01878a943aa0abf4542c72",
       "6b02dc1dcc364169c14ff0b8",
       "6b06e6e9868e27743dfc6473",
-      "6b0833dd92d2e9d521764464"
+      "6b0833dd92d2e9d521764464",
+      "6b09847c658222306c17132d"
     ],
     "instagram_stories": [
       "6ad5c51ffe198605b4ceb593",
@@ -179,7 +182,8 @@
       "6b01878b846b0ee90704820a",
       "6b02dc1dc72676f5e927d8d8",
       "6b06e6e9d0aab12c5e41400f",
-      "6b0833de92d2e9d52176465f"
+      "6b0833de92d2e9d52176465f",
+      "6b09847d049983dcfbc16e29"
     ]
   }
 }
